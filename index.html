@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Face Analysis Suite - AI Emotion Visualizer</title>
+  <meta name="description"
+    content="Real-time facial expression and emotion analysis with 3D visualization using MediaPipe and Three.js." />
+</head>
+
+<body>
+  <div id="app">
+    <div class="container">
+      <!-- 3D Scene -->
+      <canvas id="three-canvas"></canvas>
+
+      <!-- Webcam Stream -->
+      <div class="video-container">
+        <video id="webcam" autoplay playsinline></video>
+      </div>
+
+      <!-- Status Indicator -->
+      <div class="status-badge">
+        <span class="status-dot"></span>
+        <span id="status-text">AI CORE 起動中...</span>
+      </div>
+
+      <!-- Emotion Dashboard -->
+      <div class="dashboard">
+        <div class="card" id="emotion-card">
+          <h2>表情分析 (Emotion Recognition)</h2>
+          <div id="emotion-display" class="emotion-grid">
+            <!-- Emotion items will be injected here -->
+          </div>
+        </div>
+        <div class="card" id="state-card">
+          <h2>表情詳細 (Facial Details)</h2>
+          <div id="detail-display" class="emotion-grid">
+            <!-- Detail items like blink, smile will be injected here -->
+          </div>
+        </div>
+        <div class="card" id="display-card">
+          <h2>表示設定 (Display Settings)</h2>
+          <div class="control-item">
+            <label for="scale-slider">3Dモデル・スケール</label>
+            <input type="range" id="scale-slider" min="1" max="10" step="0.1" value="4">
+            <span id="scale-value">4.0x</span>
+          </div>
+          <div class="control-item mt-15">
+            <label for="aspect-slider">横方向ストレッチ (アス比)</label>
+            <input type="range" id="aspect-slider" min="0.5" max="2" step="0.05" value="1.0">
+            <span id="aspect-value">1.00x</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>

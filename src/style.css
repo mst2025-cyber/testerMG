@@ -173,7 +173,27 @@ body {
   cursor: pointer;
 }
 
-#scale-value {
+.toggle-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle-container input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #00f2fe;
+  cursor: pointer;
+}
+
+.toggle-label {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+#scale-value, #dot-value {
   font-size: 0.75rem;
   color: #00f2fe;
   text-align: right;

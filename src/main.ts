@@ -14,14 +14,19 @@ const emotionDisplay = document.getElementById('emotion-display') as HTMLElement
 const detailDisplay = document.getElementById('detail-display') as HTMLElement;
 const scaleSlider = document.getElementById('scale-slider') as HTMLInputElement;
 const scaleValueDisplay = document.getElementById('scale-value') as HTMLElement;
+const dotSlider = document.getElementById('dot-slider') as HTMLInputElement;
+const dotValueDisplay = document.getElementById('dot-value') as HTMLElement;
 const aspectSlider = document.getElementById('aspect-slider') as HTMLInputElement;
 const aspectValueDisplay = document.getElementById('aspect-value') as HTMLElement;
+const mirrorToggle = document.getElementById('mirror-toggle') as HTMLInputElement;
 
 // --- State Variables ---
 let faceLandmarker: FaceLandmarker;
 let lastVideoTime = -1;
 let currentScale = 4.0;
+let currentDotScale = 4.0;
 let currentAspect = 1.0;
+let isMirrored = true;
 
 // --- Three.js Setup ---
 const canvas = document.getElementById('three-canvas') as HTMLCanvasElement;
@@ -35,16 +40,34 @@ camera.position.z = 5;
 
 // Face points visualization (simple points)
 const geometry = new THREE.BufferGeometry();
-const material = new THREE.PointsMaterial({ color: 0x00f2fe, size: 0.016 });
+const material = new THREE.PointsMaterial({ color: 0x00f2fe });
 const points = new THREE.Points(geometry, material);
 scene.add(points);
+
+// Function to update the material dot size seamlessly based on both face scale and dot slider
+function updateMaterialSize() {
+  material.size = 0.001 * currentDotScale * currentScale;
+}
+updateMaterialSize();
+
+// Update mirror mode when toggle changes
+mirrorToggle.addEventListener('change', () => {
+  isMirrored = mirrorToggle.checked;
+  videoElement.style.transform = isMirrored ? 'scaleX(-1)' : 'scaleX(1)';
+});
 
 // Update scale when slider moves
 scaleSlider.addEventListener('input', () => {
   currentScale = parseFloat(scaleSlider.value);
   scaleValueDisplay.innerText = `${currentScale.toFixed(1)}x`;
-  // Adjust point size based on scale (base size 0.004 * currentScale)
-  material.size = 0.004 * currentScale;
+  updateMaterialSize();
+});
+
+// Update dot size when slider moves
+dotSlider.addEventListener('input', () => {
+  currentDotScale = parseFloat(dotSlider.value);
+  dotValueDisplay.innerText = `${currentDotScale.toFixed(1)}px`;
+  updateMaterialSize();
 });
 
 // Update aspect ratio stretch
@@ -160,11 +183,12 @@ function update3DScene(result: FaceLandmarkerResult) {
   if (result.faceLandmarks && result.faceLandmarks.length > 0) {
     const landmarks = result.faceLandmarks[0];
     const positions = new Float32Array(landmarks.length * 3);
+    const xFlip = isMirrored ? -1 : 1;
 
     landmarks.forEach((landmark, i) => {
       // Landmarks are in normalized coordinates [0, 1]
       // Project them into Three.js space using adjustable scale and aspect
-      positions[i * 3] = (landmark.x - 0.5) * currentScale * currentAspect;
+      positions[i * 3] = xFlip * (landmark.x - 0.5) * currentScale * currentAspect;
       positions[i * 3 + 1] = -(landmark.y - 0.5) * currentScale;
       positions[i * 3 + 2] = -landmark.z * currentScale; // z is depth
     });

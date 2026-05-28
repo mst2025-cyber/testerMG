@@ -44,9 +44,20 @@
         <div class="card" id="display-card">
           <h2>表示設定 (Display Settings)</h2>
           <div class="control-item">
-            <label for="scale-slider">3Dモデル・スケール</label>
+            <label class="toggle-container" for="mirror-toggle">
+              <input type="checkbox" id="mirror-toggle" checked>
+              <span class="toggle-label">左右反転 (鏡像モード)</span>
+            </label>
+          </div>
+          <div class="control-item mt-15">
+            <label for="scale-slider">3Dモデル・スケール (顔の大きさ)</label>
             <input type="range" id="scale-slider" min="1" max="10" step="0.1" value="4">
             <span id="scale-value">4.0x</span>
+          </div>
+          <div class="control-item mt-15">
+            <label for="dot-slider">ドットの大きさ</label>
+            <input type="range" id="dot-slider" min="1" max="10" step="0.1" value="4">
+            <span id="dot-value">4.0px</span>
           </div>
           <div class="control-item mt-15">
             <label for="aspect-slider">横方向ストレッチ (アス比)</label>
